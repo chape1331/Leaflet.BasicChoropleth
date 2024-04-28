@@ -10,7 +10,7 @@
 var L = require("leaflet");
 var chroma = require("chroma-js");
 
-L.BasicChoropleth = L.GeoJSON.extend({
+L.Choropleth = L.GeoJSON.extend({
     options: {
         //data: null,
         symetric: true, // Symetric around zero
@@ -35,7 +35,7 @@ L.BasicChoropleth = L.GeoJSON.extend({
         opacity: 1.0,
         fillOpacity: 1.0,
     },
-    _selectedIds: [25],
+    _selectedIds: [],
     _colors: null,
     _limits: null,
 
@@ -61,6 +61,7 @@ L.BasicChoropleth = L.GeoJSON.extend({
             let layer = layers[key];
             let id = layer.feature.properties[attributes.id]; 
             let value = layer.feature.properties[attributes.value];
+            console.log(value);
             let fillColor = this._getColor(value);
             let styleCopy = Object.assign({}, style);
             styleCopy.fillColor = fillColor;
@@ -102,13 +103,17 @@ L.BasicChoropleth = L.GeoJSON.extend({
 
     _generateColors: function() {
         let options = this.options
-        let data = this.options.data;
+        //let data = this.options.data;
         let attribute = this.options.attributes.value;
         let values = [];
 
-        for (key in data) {
-            item = data[key];
-            let value = item[attribute];
+        let layers = this._layers;
+        console.log(layers);
+        for (key in layers) {
+            let layer = layers[key];
+            console.log(layer);
+            let value = layer.feature.properties[attribute];
+            console.log(value);
             values.push(value);
         }
 
@@ -165,8 +170,8 @@ L.BasicChoropleth = L.GeoJSON.extend({
     },
 })
 
-L.basicChoropleth = function(geojson, options){
-    return new L.BasicChoropleth(geojson, options)
+L.choropleth = function(geojson, options){
+    return new L.Choropleth(geojson, options)
 }
 
 module.exports = L.basicChoropleth;
