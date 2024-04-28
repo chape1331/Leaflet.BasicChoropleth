@@ -1,0 +1,27 @@
+{
+  "name": "leaflet.basicchoropleth",
+  "version": "1.0.0",
+  "description": "This is a plugin to create a basic choropleth with Leaflet. It extends the class GeoJSON.",
+  "main": "src/L.BasicChoropleth.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chape1331/L.BasicChoropleth.git"
+  },
+  "keywords": [
+    "Leaflet",
+    "Plugin",
+    "Choropleth"
+  ],
+  "author": "Gustavo Garcia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chape1331/L.BasicChoropleth/issues"
+  },
+  "homepage": "https://github.com/chape1331/L.BasicChoropleth#readme",
+  "devDependencies": {
+    "chroma-js": "^2.4.2"
+  }
+}
