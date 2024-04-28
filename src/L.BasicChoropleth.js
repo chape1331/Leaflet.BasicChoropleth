@@ -10,7 +10,7 @@
 var L = require("leaflet");
 var chroma = require("chroma-js");
 
-L.Choropleth = L.GeoJSON.extend({
+L.BasicChoropleth = L.GeoJSON.extend({
     options: {
         //data: null,
         symetric: true, // Symetric around zero
@@ -45,7 +45,6 @@ L.Choropleth = L.GeoJSON.extend({
     },
 
     setStyle: function() {
-        console.log(this);
         this._validateAttributes();
         this._validateStyles();
         this._generateColors();
@@ -61,7 +60,6 @@ L.Choropleth = L.GeoJSON.extend({
             let layer = layers[key];
             let id = layer.feature.properties[attributes.id]; 
             let value = layer.feature.properties[attributes.value];
-            console.log(value);
             let fillColor = this._getColor(value);
             let styleCopy = Object.assign({}, style);
             styleCopy.fillColor = fillColor;
@@ -103,17 +101,13 @@ L.Choropleth = L.GeoJSON.extend({
 
     _generateColors: function() {
         let options = this.options
-        //let data = this.options.data;
         let attribute = this.options.attributes.value;
         let values = [];
 
         let layers = this._layers;
-        console.log(layers);
         for (key in layers) {
             let layer = layers[key];
-            console.log(layer);
             let value = layer.feature.properties[attribute];
-            console.log(value);
             values.push(value);
         }
 
@@ -129,14 +123,7 @@ L.Choropleth = L.GeoJSON.extend({
 
         this._colors = chroma.scale(options.colors).colors(options.steps);
         this._limits = chroma.limits(values, options.mode, options.steps);
-
-        console.log(this._limits, this._colors);
     },
-
-    /*updateData: function(data){
-        this.options.data = data;
-        this.setStyle();
-    },*/
 
     updateStyle: function(style){
         this.options.style = style;
@@ -170,8 +157,8 @@ L.Choropleth = L.GeoJSON.extend({
     },
 })
 
-L.choropleth = function(geojson, options){
-    return new L.Choropleth(geojson, options)
+L.basicChoropleth = function(geojson, options){
+    return new L.BasicChoropleth(geojson, options)
 }
 
 module.exports = L.basicChoropleth;
