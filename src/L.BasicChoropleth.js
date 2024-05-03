@@ -158,6 +158,20 @@ L.BasicChoropleth = L.GeoJSON.extend({
 
         this.setStyle();
     },
+
+    getSelected: function() {
+        let selection = {};
+        let style = this.options.pointStyle;
+
+        for (i in this._selectedIds) {
+            let item = this._selectedIds[i];
+            let index = this._selectedIds.indexOf(item);
+            index = index % style.fillColorSelected.length;
+            selection[item] = style.fillColorSelected[index]; 
+        }
+
+        return selection;
+    },
 })
 
 L.basicChoropleth = function(geojson, options){
