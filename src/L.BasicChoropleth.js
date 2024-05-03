@@ -17,7 +17,7 @@ L.BasicChoropleth = L.GeoJSON.extend({
         attributes: {},
         style: {},
         colors: ["red", "white", "green"],
-        steps: 10,
+        classes: 10,
         mode: 'e',
     },
 
@@ -28,7 +28,7 @@ L.BasicChoropleth = L.GeoJSON.extend({
     },
     _defaultStyle: {
         color: "lightgray",
-        colorSelected: "red",
+        colorSelected: ["red"],
         fillColor: "lightgray",
         weight: 2,
         weightSelected: 2,
@@ -49,13 +49,10 @@ L.BasicChoropleth = L.GeoJSON.extend({
         this._validateStyles();
         this._generateColors();
 
-        //let options = this.options;
-        //let data = this.options.data;
         let attributes = this.options.attributes;
         let style = this.options.style;
 
         let layers = this._layers;
-
         for (let key in layers) {
             let layer = layers[key];
             let id = layer.feature.properties[attributes.id]; 
@@ -63,8 +60,12 @@ L.BasicChoropleth = L.GeoJSON.extend({
             let fillColor = this._getColor(value);
             let styleCopy = Object.assign({}, style);
             styleCopy.fillColor = fillColor;
-            if (this._selectedIds.indexOf(id) > -1){
-                styleCopy.color = style.colorSelected;
+
+            var index = this._selectedIds.indexOf(id);
+            if (index > -1){
+                index = index % style.colorSelected.length;
+                styleCopy.color = style.colorSelected[index];
+                styleCopy.weight = style.weight * 2;
                 layer.bringToFront();
             }
             layer.setStyle(styleCopy);
@@ -91,6 +92,8 @@ L.BasicChoropleth = L.GeoJSON.extend({
 
     _validateStyles: function() {
         let style = this.options.style;
+        if (typeof(style.colorSelected) == "string") style.colorSelected = [style.colorSelected]
+
         if (style == null | style == undefined) style = Object.assign({}, this._defaultStyle);
         else {
             for (key in this._defaultStyle){
@@ -121,8 +124,8 @@ L.BasicChoropleth = L.GeoJSON.extend({
             }
         }
 
-        this._colors = chroma.scale(options.colors).colors(options.steps);
-        this._limits = chroma.limits(values, options.mode, options.steps);
+        this._colors = chroma.scale(options.colors).colors(options.classes);
+        this._limits = chroma.limits(values, options.mode, options.classes);
     },
 
     updateStyle: function(style){

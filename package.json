@@ -2,8 +2,9 @@
   "name": "leaflet.basicchoropleth",
   "version": "1.0.0",
   "description": "This is a plugin to create a basic choropleth with Leaflet. It extends the class GeoJSON.",
-  "main": "src/L.BasicChoropleth.js",
+  "main": "./src/L.BasicChoropleth.js",
   "scripts": {
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +23,8 @@
   },
   "homepage": "https://github.com/chape1331/L.BasicChoropleth#readme",
   "devDependencies": {
-    "chroma-js": "^2.4.2"
+    "chroma-js": "^2.4.2",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
   }
 }

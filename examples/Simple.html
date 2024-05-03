@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic Choropleth</title>
+    <title>Simple Choropleth</title>
 
     <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
     <!-- Leaflet.BasicChoropleth -->
     <!--script src="../dist/L.BasicChoropleth.min.js"></script-->
-    <script src="../src/L.BasicChoropleth.js"></script>
+    <script src="../dist/L.BasicChoropleth.min.js"></script>
 
     <style type="text/css">
         #map {
@@ -26,14 +29,32 @@
 
     <script>
         // Base map
-        this.map = L.map("map",{
+        var map = L.map("map",{
             renderer: L.canvas({ tolerance: 5 })
         }).setView([-2.08831311, 30.073699], 9);
 
         L.tileLayer('http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}').addTo(this.map);
 
         // Load test data
+        fetch('./data/balances_rice.geojson', {
+            mode: "cors", 
+            headers: {'Access-Contro-Allow-Origin': '*'}
+        }).then(response => response.text())
+        .then(data => {
+            addLayer(data);
+        });
 
+        function addLayer(data){
+            var choroplet = L.basicChoropleth(JSON.parse(data), {
+                attributes: {"id": "fid", "value": "bal_rice"},
+                colors: ["red", "white", "green"],
+                symetric: true,
+                style: {
+                    color: "white",
+                    weigth: "3px",
+                }
+            }).addTo(map);
+        }
 
     </script>
 </body>
