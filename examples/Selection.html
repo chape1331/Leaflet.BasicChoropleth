@@ -45,7 +45,7 @@
         // Load test data
         fetch('./data/balances_rice.geojson', {
             mode: "cors", 
-            headers: {'Access-Contro-Allow-Origin': '*'}
+            headers: {'Access-Control-Allow-Origin': '*'}
         }).then(response => response.text())
         .then(data => {
             addLayer(data);
