@@ -30,6 +30,7 @@ L.BasicChoropleth = L.GeoJSON.extend({
         color: "lightgray",
         colorSelected: ["red"],
         fillColor: "lightgray",
+        fillColorNull: "lightgray",
         weight: 2,
         weightSelected: 2,
         opacity: 1.0,
@@ -56,8 +57,9 @@ L.BasicChoropleth = L.GeoJSON.extend({
         for (let key in layers) {
             let layer = layers[key];
             let id = layer.feature.properties[attributes.id]; 
-            let value = layer.feature.properties[attributes.value];
-            let fillColor = this._getColor(value);
+            let value = layer.feature.properties[attributes.value];            
+            let fillColor = style.fillColorNull;
+            if (!(value == null)) fillColor = this._getColor(value);
             let styleCopy = Object.assign({}, style);
             styleCopy.fillColor = fillColor;
 
@@ -66,6 +68,7 @@ L.BasicChoropleth = L.GeoJSON.extend({
                 index = index % style.colorSelected.length;
                 styleCopy.color = style.colorSelected[index];
                 styleCopy.weight = style.weight * 2;
+                styleCopy.opacity = 1.0;                
                 layer.bringToFront();
             }
             layer.setStyle(styleCopy);
