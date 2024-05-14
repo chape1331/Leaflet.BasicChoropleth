@@ -46,12 +46,19 @@
             mode: "cors", 
             headers: {'Access-Control-Allow-Origin': '*'}
         }).then(response => response.text())
-        .then(data => {
-            addLayer(data);
+        .then(geoms => {
+            fetch('./data/balances_rice_data.json', {
+                mode: "cors",
+                headers: {'Access-Control-Allow-Origin': '*'}
+            }).then(response => response.text())
+            .then(data => {
+                addLayer(geoms, data)
+            });
         });
 
-        function addLayer(data){
-            choropleth = L.basicChoropleth(JSON.parse(data), {
+        function addLayer(geoms, data){
+            choropleth = L.basicChoropleth(JSON.parse(geoms), {
+                data: JSON.parse(data),
                 attributes: {"id": "fid", "value": "bal_rice"},
                 colors: ["red", "white", "green"],
                 symetric: true,

@@ -12,7 +12,7 @@ var chroma = require("chroma-js");
 
 L.BasicChoropleth = L.GeoJSON.extend({
     options: {
-        //data: null,
+        data: null,
         symetric: true, // Symetric around zero
         attributes: {},
         style: {},
@@ -56,8 +56,10 @@ L.BasicChoropleth = L.GeoJSON.extend({
         let layers = this._layers;
         for (let key in layers) {
             let layer = layers[key];
-            let id = layer.feature.properties[attributes.id]; 
-            let value = layer.feature.properties[attributes.value];            
+            let id = layer.feature.properties[attributes.id];
+            let value = null;
+            if (this.options.data == null) value = layer.feature.properties[attributes.value];            
+            else value = this.options.data[id][attributes.value];
             let fillColor = style.fillColorNull;
             if (!(value == null)) fillColor = this._getColor(value);
             let styleCopy = Object.assign({}, style);
@@ -129,6 +131,11 @@ L.BasicChoropleth = L.GeoJSON.extend({
 
         this._colors = chroma.scale(options.colors).colors(options.classes);
         this._limits = chroma.limits(values, options.mode, options.classes);
+    },
+
+    updateDate: function(data) {
+        this.options.data = data;
+        this.setStyle();
     },
 
     updateStyle: function(style){
