@@ -133,7 +133,7 @@ L.BasicChoropleth = L.GeoJSON.extend({
         this._limits = chroma.limits(values, options.mode, options.classes);
     },
 
-    updateDate: function(data) {
+    updateData: function(data) {
         this.options.data = data;
         this.setStyle();
     },
